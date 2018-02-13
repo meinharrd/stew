@@ -54,11 +54,17 @@ export default async function createSourceAccountClient(sourceSecretKey, isTestN
 		return '';
 	};
 
+	const getPublicKey = () => {
+		const sourceKeypair = Keypair.fromSecret(sourceSecretKey);
+		return sourceKeypair.publicKey();
+	};
+
 	return {
 		isDestinationAccountActivated,
 		createSignAndSubmitTransaction,
 		getBalance,
-		reloadAccount
+		reloadAccount,
+		getPublicKey
 	}
 }
 

@@ -4,6 +4,7 @@ import createSourceAccountClient from '../stellar/stellar';
 import Login from './Login';
 import CheckSourceAccount from './CheckSourceAccount';
 import ConfirmTopup from './ConfirmTopup';
+import Receive from './Receive';
 import Scanner from './Scanner';
 import SourceAccountError from './SourceAccountError';
 import StartScan from './StartScan';
@@ -122,12 +123,20 @@ export default class App extends Component {
 		this.setState(this.initStateFromLocalStorage(this.props));
 	}
 
+	home = () => {
+		this.setState({ mode: 'home' });
+	}
+
 	abortScan = () => {
 		this.setState({ mode: 'startScan' });
 	}
 
 	startScan = () => {
 		this.setState({ mode: 'scan' });
+	}
+
+	startReceive = () => {
+		this.setState({ mode: 'receive' });
 	}
 
 	renderConfirmation = () => {
@@ -180,16 +189,25 @@ export default class App extends Component {
 				return <Login login={this.login}/>;
 			case 'checkSourceAccount':
 				return <CheckSourceAccount abort={this.logout}/>;
+			case 'receive':
+				return <Receive
+					sourceAccountPromise={this.state.sourceAccountPromise}
+					accountNotValid={this.sourceAccountNotValid}
+					home={this.home}
+					mode={this.state.mode}
+				/>
 			case 'sourceAccountError':
 			case 'sourceAccountNotFound':
 				return <SourceAccountError
 					abort={this.logout}
 					notFound={this.state.mode === 'sourceAccountNotFound'}/>;
+			case 'home':
 			case 'startScan':
 				return <StartScan
 					sourceAccountPromise={this.state.sourceAccountPromise}
 					accountNotValid={this.sourceAccountNotValid}
 					logout={this.logout}
+					startReceive={this.startReceive}
 					startScan={this.startScan}
 				/>;
 			case 'scan':
