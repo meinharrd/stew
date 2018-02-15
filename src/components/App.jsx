@@ -6,6 +6,7 @@ import CheckSourceAccount from './CheckSourceAccount';
 import ConfirmTopup from './ConfirmTopup';
 import Receive from './Receive';
 import Scanner from './Scanner';
+import Send from './Send';
 import SourceAccountError from './SourceAccountError';
 import StartScan from './StartScan';
 import TopupFailure from './TopupFailure';
@@ -139,6 +140,10 @@ export default class App extends Component {
 		this.setState({ mode: 'receive' });
 	}
 
+	startSend = () => {
+		this.setState({ mode: 'send' });
+	}
+
 	renderConfirmation = () => {
 		let subComponent;
 		switch (this.state.mode) {
@@ -196,6 +201,13 @@ export default class App extends Component {
 					home={this.home}
 					mode={this.state.mode}
 				/>
+			case 'send':
+				return <Send
+					sourceAccountPromise={this.state.sourceAccountPromise}
+					accountNotValid={this.sourceAccountNotValid}
+					home={this.home}
+					mode={this.state.mode}
+				/>
 			case 'sourceAccountError':
 			case 'sourceAccountNotFound':
 				return <SourceAccountError
@@ -209,6 +221,7 @@ export default class App extends Component {
 					logout={this.logout}
 					startReceive={this.startReceive}
 					startScan={this.startScan}
+					startSend={this.startSend}
 				/>;
 			case 'scan':
 			case 'topupDeclined':

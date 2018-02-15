@@ -11,6 +11,10 @@ export default (props) => (
 			/>
 		</span>
 		<div className="vert-dist"/>
+		<button className="pure-button pure-button-primary" onClick={props.startSend}>
+			Send
+		</button>
+		&nbsp;
 		<button className="pure-button pure-button-primary" onClick={props.startReceive}>
 			Receive
 		</button>
