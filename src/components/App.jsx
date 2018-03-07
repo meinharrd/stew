@@ -120,6 +120,27 @@ export default class App extends Component {
 		}
 	}
 
+	confirmSend = async (destinationAddress, amountInLumens) => {
+		this.setState({
+			mode: 'topupPending',
+			scannedPublicAddress: destinationAddress
+		});
+		const sourceAccount = await this.state.sourceAccountPromise;
+		try {
+			const destinactionAccountActivated = await sourceAccount.isDestinationAccountActivated(this.state.scannedPublicAddress)
+
+			await sourceAccount.createSignAndSubmitTransaction(destinationAddress, amountInLumens);
+			this.setState({
+				destinactionAccountActivated,
+				mode: 'topupSuccess'
+			});
+		} catch(error) {
+			this.setState({ mode: 'topupFailure' });
+			console.log(error)
+			console.log(error.message)
+		}
+	}
+
 	restart = () => {
 		this.setState(this.initStateFromLocalStorage(this.props));
 	}
@@ -205,6 +226,7 @@ export default class App extends Component {
 				return <Send
 					sourceAccountPromise={this.state.sourceAccountPromise}
 					accountNotValid={this.sourceAccountNotValid}
+					confirmSend={this.confirmSend}
 					home={this.home}
 					mode={this.state.mode}
 				/>
